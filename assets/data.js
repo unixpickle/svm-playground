@@ -8,6 +8,14 @@
     this._sign = sign;
   }
 
+  DataPoint.prototype.x = function() {
+    return this._x;
+  };
+
+  DataPoint.prototype.y = function() {
+    return this._y;
+  };
+
   DataPoint.prototype.vector = function(coordFlags) {
     var coords = [
       this._x,
@@ -27,7 +35,7 @@
     return output;
   };
 
-  DataPoint.prototype.sign = function() {
+  DataPoint.prototype.positive = function() {
     return this._sign;
   };
 
@@ -36,30 +44,30 @@
     this._negGen = negGen;
   }
 
-  DataSet.prototype.generateData = function(count) {
-    var posCount = Math.floor(count / 2);
+  DataSet.prototype.generateData = function(posCount, negCount) {
     var res = [];
-    for (var i = 0; i < count; ++i) {
+    for (var i = 0, count = posCount+negCount; i < count; ++i) {
       if (i < posCount) {
         res.push(this._posGen());
       } else {
         res.push(this._negGen());
       }
     }
+    return res;
   };
 
   window.app.dataSets = [
     new DataSet(function() {
       while (true) {
         var p = randomPoint();
-        if (p[0]+p[1] > 0.1) {
+        if (p[0]+p[1] > 0.2) {
           return new DataPoint(p[0], p[1], true);
         }
       }
     }, function() {
       while (true) {
         var p = randomPoint();
-        if (p[0]+p[1] < -0.1) {
+        if (p[0]+p[1] < -0.2) {
           return new DataPoint(p[0], p[1], false);
         }
       }
@@ -70,8 +78,6 @@
     return [Math.random()*2-1, Math.random()*2-1];
   }
 
-  function dotProduct(p1, p2) {
-    return p1[0]*p2[0] + p1[1]*p2[1];
-  }
+  window.app.DataPoint = DataPoint;
 
 })();
