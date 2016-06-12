@@ -20,8 +20,10 @@
     return Math.exp(-param * diff);
   }
 
-  window.app.kernelNames = ['Linear', '(xy+1)^2', 'RBF 0.1', 'RBF 1', 'RBF 0.01'];
+  window.app.kernelNames = ['Linear', '(xy+1)^2', 'RBF 0.1', 'RBF 1', 'RBF 0.01', 'RBF 3',
+    'RBF 10'];
   window.app.kernels = [linearKernel, squareOneKernel, rbfKernel.bind(null, 0.1),
-    rbfKernel.bind(null, 1), rbfKernel.bind(null, 0.01)];
+    rbfKernel.bind(null, 1), rbfKernel.bind(null, 0.01), rbfKernel.bind(null, 3),
+    rbfKernel.bind(null, 10)];
 
 })();

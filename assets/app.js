@@ -1,6 +1,6 @@
 (function() {
 
-  var SAMPLE_COUNT = 50;
+  var SAMPLE_COUNT = 100;
 
   var dataView;
 
