@@ -15,6 +15,7 @@
     this._classifier = null;
     this._discretize = false;
     this._supportOnly = false;
+    this._cachedClassifierDrawing = null;
   }
 
   DataView.prototype.getSamples = function() {
@@ -28,11 +29,13 @@
 
   DataView.prototype.setClassifier = function(c) {
     this._classifier = c;
+    this._cachedClassifierDrawing = null;
     this._draw();
   };
 
   DataView.prototype.setDiscretize = function(f) {
     this._discretize = f;
+    this._cachedClassifierDrawing = null;
     this._draw();
   };
 
@@ -51,6 +54,10 @@
   };
 
   DataView.prototype._drawClassifier = function(ctx) {
+    if (this._cachedClassifierDrawing !== null) {
+      ctx.putImageData(this._cachedClassifierDrawing, 0, 0);
+      return;
+    }
     var width = this._canvas.width;
     var height = this._canvas.height;
     var data = ctx.createImageData(width, height);
@@ -65,7 +72,8 @@
         dataIdx += 4;
       }
     }
-    ctx.putImageData(data, 0, 0);
+    this._cachedClassifierDrawing = data;
+    this._drawClassifier(ctx);
   };
 
   DataView.prototype._drawSamplePoints = function(ctx) {
