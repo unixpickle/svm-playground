@@ -3,6 +3,8 @@
   <head>
     <title>SVM Playground</title>
 
+    <link rel="stylesheet" href="assets/style.css" type="text/css">
+
     <script type="text/javascript">
     window.app = {};
     </script>
@@ -14,16 +16,31 @@
     <script src="assets/app.js"></script>
   </head>
   <body>
-    Kernel: <select id="kernel-picker"></select>
-    <br>
-    Data set: <select id="data-picker"></select>
-    <br>
-    Threshold: <select id="threshold-picker"></select>
-    <br>
+    <div id="dropdowns">
+      <div class="picker-cell">
+        <label>Kernel</label>
+        <select id="kernel-picker"></select>
+      </div>
+      <div class="picker-cell">
+        <label>Data</label>
+        <select id="data-picker"></select>
+      </div>
+      <div class="picker-cell">
+        <label>Threshold</label>
+        <select id="threshold-picker"></select>
+      </div>
+    </div>
     <canvas id="data-canvas" width="300" height="300"></canvas>
     <br>
-    <input type="checkbox" id="support-only-checkbox"> Only show support vectors
-    <br>
-    <input type="checkbox" id="discretize-checkbox"> Discretize output
+    <div id="flags">
+      <div class="flag-cell">
+        <input type="checkbox" id="support-only-checkbox">
+        <label>Only show support vectors</label>
+      </div>
+      <div class="flag-cell">
+        <input type="checkbox" id="discretize-checkbox">
+        <label>Discretize output</label>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,0 +1,41 @@
+body {
+  background-color: #f0f0f0;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+#dropdowns {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.picker-cell {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.picker-cell > label {
+  display: inline-block;
+  text-align: right;
+}
+
+.picker-cell > select {
+  display: inline-block;
+  width: 100px;
+}
+
+#data-canvas {
+  background-color: white;
+  border: 2px solid black;
+}
+
+#flags {
+  display: inline-block;
+  width: 250px;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.flag-cell {
+  margin: 2px 0;
+}
