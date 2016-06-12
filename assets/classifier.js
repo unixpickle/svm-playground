@@ -3,7 +3,8 @@
   var TIMEOUT = 3000;
   var GRID_SIZE = 300;
 
-  window.app.kernels = ['RBF 3', 'Linear', '(xy+1)^2', 'RBF 0.1', 'RBF 1', 'RBF 10'];
+  window.app.kernels = ['exp(-3*|x-y|)', 'Linear', '(xy+1)^2', 'tanh(xy-1)',
+    'exp(-.1*|x-y|)', 'exp(-1*|x-y|)', 'exp(-10*|x-y|)'];
 
   function Classifier(samples, result) {
     this._samples = samples;

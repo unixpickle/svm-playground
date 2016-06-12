@@ -5,12 +5,13 @@ import "math"
 type Kernel func(x1, y1, x2, y2 float64) float64
 
 var Kernels = map[string]Kernel{
-	"Linear":   linearKernel,
-	"(xy+1)^2": squareOneKernel,
-	"RBF 0.1":  makeRBFKernel(0.1),
-	"RBF 1":    makeRBFKernel(1),
-	"RBF 3":    makeRBFKernel(3),
-	"RBF 10":   makeRBFKernel(10),
+	"Linear":         linearKernel,
+	"(xy+1)^2":       squareOneKernel,
+	"exp(-.1*|x-y|)": makeRBFKernel(0.1),
+	"exp(-1*|x-y|)":  makeRBFKernel(1),
+	"exp(-3*|x-y|)":  makeRBFKernel(3),
+	"exp(-10*|x-y|)": makeRBFKernel(10),
+	"tanh(xy-1)":     makeTanhKernel(1, -1),
 }
 
 func linearKernel(x1, y1, x2, y2 float64) float64 {
@@ -28,5 +29,11 @@ func makeRBFKernel(param float64) Kernel {
 		yDiff := y1 - y2
 		diffMag := xDiff*xDiff + yDiff*yDiff
 		return math.Exp(-param * diffMag)
+	}
+}
+
+func makeTanhKernel(coeff, bias float64) Kernel {
+	return func(x1, y1, x2, y2 float64) float64 {
+		return math.Tanh(coeff*linearKernel(x1, y1, x2, y2) + bias)
 	}
 }

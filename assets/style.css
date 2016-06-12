@@ -29,7 +29,7 @@ html, body {
 
 .picker-cell > select {
   display: inline-block;
-  width: 100px;
+  width: 110px;
 }
 
 #output {
