@@ -1,12 +1,20 @@
-body {
+html, body {
+  padding: 0;
+  margin: 0;
   background-color: #f0f0f0;
   font-family: sans-serif;
   text-align: center;
 }
 
+#dropdowns, #output, #flags {
+  position: relative;
+}
+
 #dropdowns {
+  background-color: white;
   text-align: center;
-  margin-bottom: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
 .picker-cell {
@@ -24,18 +32,34 @@ body {
   width: 100px;
 }
 
-#data-canvas {
+#output {
   background-color: white;
-  border: 2px solid black;
+  display: inline-block;
+  width: 300px;
+  padding: 10px;
+}
+
+#output > label {
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+#data-canvas {
+  display: block;
+  background-color: white;
+  width: 300px;
+  height: 300px;
 }
 
 #flags {
   display: inline-block;
+  background-color: white;
   width: 250px;
-  margin-top: 10px;
+  padding: 10px 35px;
+  margin-top: 15px;
   text-align: left;
 }
 
 .flag-cell {
-  margin: 2px 0;
+  margin: 5px 0;
 }

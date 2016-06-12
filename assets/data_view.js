@@ -1,11 +1,12 @@
 (function() {
 
-  var CIRCLE_RADIUS = 0.02;
-  var CIRCLE_BORDER_WIDTH = 0.01;
-  var POSITIVE_COLOR = 'blue';
-  var NEGATIVE_COLOR = 'red';
+  var CIRCLE_RADIUS = 0.015;
+  var CIRCLE_BORDER_WIDTH = 0.008;
+  var CIRCLE_BORDER_COLOR = 'black';
+  var POSITIVE_COLOR = '#3355ff';
+  var NEGATIVE_COLOR = '#ff5555';
 
-  var POS_DECISION_COLOR = [0x77, 0x9a, 0xee];
+  var POS_DECISION_COLOR = [0x67, 0x9a, 0xee];
   var NEG_DECISION_COLOR = [0xf7, 0x9a, 0x9b];
 
   function DataView(canvas) {
@@ -81,7 +82,7 @@
     ctx.save();
     ctx.scale(this._canvas.width, this._canvas.height);
 
-    ctx.strokeStyle = 'black';
+    ctx.strokeStyle = CIRCLE_BORDER_COLOR;
     ctx.lineWidth = CIRCLE_BORDER_WIDTH;
 
     var samples = this._samplesToDraw();
