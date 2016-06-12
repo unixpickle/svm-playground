@@ -13,6 +13,15 @@
     return this._samples;
   };
 
+  Classifier.prototype.supportVectors = function() {
+    var vecs = [];
+    var indices = this._solution.indices;
+    for (var i = 0, len = indices.length; i < len; ++i) {
+      vecs.push(this._samples[indices[i]]);
+    }
+    return vecs;
+  };
+
   Classifier.prototype.classify = function(sample) {
     var sampleVec = sample.vector(this._coordFlags);
     var indices = this._solution.indices;

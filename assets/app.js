@@ -42,6 +42,13 @@
     });
   }
 
+  function setupSupportCheckbox() {
+    var box = document.getElementById('support-only-checkbox');
+    box.addEventListener('change', function() {
+      dataView.setSupportOnly(box.checked);
+    });
+  }
+
   function setupDataView() {
     var dataCanvas = document.getElementById('data-canvas');
     dataView = new window.app.DataView(dataCanvas);
@@ -58,6 +65,7 @@
   window.addEventListener('load', function() {
     setupKernelPicker();
     setupDataPicker();
+    setupSupportCheckbox();
     setupDataView();
 
     var data = currentDataSet.generateData(SAMPLE_COUNT, SAMPLE_COUNT);

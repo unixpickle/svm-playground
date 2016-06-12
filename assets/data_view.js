@@ -14,6 +14,7 @@
     this._samples = [];
     this._classifier = null;
     this._discretize = false;
+    this._supportOnly = false;
   }
 
   DataView.prototype.getSamples = function() {
@@ -32,6 +33,11 @@
 
   DataView.prototype.setDiscretize = function(f) {
     this._discretize = f;
+    this._draw();
+  };
+
+  DataView.prototype.setSupportOnly = function(f) {
+    this._supportOnly = f;
     this._draw();
   };
 
@@ -69,8 +75,9 @@
     ctx.strokeStyle = 'black';
     ctx.lineWidth = CIRCLE_BORDER_WIDTH;
 
-    for (var i = 0, len = this._samples.length; i < len; ++i) {
-      var sample = this._samples[i];
+    var samples = this._samplesToDraw();
+    for (var i = 0, len = samples.length; i < len; ++i) {
+      var sample = samples[i];
       var x = (sample.x()+1)/2;
       var y = (sample.y()+1)/2;
       ctx.fillStyle = POSITIVE_COLOR;
@@ -85,6 +92,14 @@
     }
 
     ctx.restore();
+  };
+
+  DataView.prototype._samplesToDraw = function() {
+    if (!this._supportOnly || this._classifier === null) {
+      return this._samples;
+    } else {
+      return this._classifier.supportVectors();
+    }
   };
 
   DataView.prototype._colorForPoint = function(x, y) {
