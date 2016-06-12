@@ -2,11 +2,15 @@
 
   var TIMEOUT = 3000;
 
-  function Classifier(samples, solution, coordFlags, kernel) {
+  function Classifier(samples, solution, kernel) {
     this._samples = samples;
     this._solution = solution;
-    this._coordFlags = coordFlags;
     this._kernel = kernel;
+
+    this._sampleVecs = [];
+    for (var i = 0, len = this._samples.length; i < len; ++i) {
+      this._sampleVecs[i] = samples[i].vector();
+    }
   }
 
   Classifier.prototype.samples = function() {
@@ -22,15 +26,15 @@
     return vecs;
   };
 
-  Classifier.prototype.classify = function(sample) {
-    var sampleVec = sample.vector(this._coordFlags);
+  Classifier.prototype.classify = function(x, y) {
+    var sampleVec = [x, y];
     var indices = this._solution.indices;
     var coeffs = this._solution.coeffs;
 
     var sum = 0;
     for (var i = 0, len = indices.length; i < len; ++i) {
-      var supportVec = this._samples[indices[i]];
-      var product = this._kernel(sampleVec, supportVec.vector(this._coordFlags));
+      var supportVec = this._sampleVecs[indices[i]];
+      var product = this._kernel(sampleVec, supportVec);
       var coeff = coeffs[i];
       sum += coeff * product;
     }
@@ -38,14 +42,13 @@
     return sum + this._solution.threshold;
   };
 
-  window.app.makeClassifier = function(samples, coordFlags, tradeoff, kernel, cb) {
-    coordFlags = coordFlags.slice();
+  window.app.makeClassifier = function(samples, tradeoff, kernel, cb) {
     samples = samples.slice();
 
     var posVecs = [];
     var negVecs = [];
     for (var i = 0, len = samples.length; i < len; ++i) {
-      var vec = samples[i].vector(coordFlags);
+      var vec = samples[i].vector();
       if (samples[i].positive()) {
         posVecs.push(vec);
       } else {
@@ -57,7 +60,7 @@
     outputElement.className = 'loading';
     window.app.solve(posVecs, negVecs, tradeoff, TIMEOUT, kernel, function(s) {
       outputElement.className = '';
-      cb(new Classifier(samples, s, coordFlags, kernel));
+      cb(new Classifier(samples, s, kernel));
     });
   };
 

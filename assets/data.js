@@ -1,7 +1,5 @@
 (function() {
 
-  window.app.coordinateNames = ['X', 'Y', 'X^2', 'Y^2', 'XY', 'sin(X)', 'sin(Y)'];
-
   function DataPoint(x, y, sign) {
     this._x = x;
     this._y = y;
@@ -16,23 +14,8 @@
     return this._y;
   };
 
-  DataPoint.prototype.vector = function(coordFlags) {
-    var coords = [
-      this._x,
-      this._y,
-      Math.pow(this._x, 2),
-      Math.pow(this._y, 2),
-      this._x * this._y,
-      Math.sin(this._x),
-      Math.sin(this._y),
-    ];
-    var output = [];
-    for (var i = 0, len = coords.length; i < len; ++i) {
-      if (coordFlags[i]) {
-        output.push(coords[i]);
-      }
-    }
-    return output;
+  DataPoint.prototype.vector = function() {
+    return [this._x, this._y];
   };
 
   DataPoint.prototype.positive = function() {

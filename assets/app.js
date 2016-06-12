@@ -82,7 +82,7 @@
   function trainClassifier() {
     dataView.setClassifier(null);
     var data = dataView.getSamples();
-    window.app.makeClassifier(data, [true, true], currentThreshold, currentKernel,
+    window.app.makeClassifier(data, currentThreshold, currentKernel,
       dataView.setClassifier.bind(dataView));
   }
 

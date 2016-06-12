@@ -132,8 +132,7 @@
 
     for (var y = 0; y < height; ++y) {
       for (var x = 0; x < width; ++x) {
-        var point = new window.app.DataPoint((2*x/width)-1, (2*y/height)-1, false);
-        var rating = this._classifier.classify(point);
+        var rating = this._classifier.classify((2*x/width)-1, (2*y/height)-1);
         this._cachedProducts.push(rating);
       }
     }
