@@ -24,7 +24,7 @@
   };
 
   Classifier.prototype.classify = function(x, y) {
-    return this._result.gridCache[x + GRID_SIZE*y];
+    return this._result.gridCache[(x>>1) + GRID_SIZE*(y>>1)];
   };
 
   window.app.makeClassifier = function(samples, tradeoff, kernel, cb) {
