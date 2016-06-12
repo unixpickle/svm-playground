@@ -1,69 +1,60 @@
 package main
 
 import (
-	"time"
+	"encoding/json"
 
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/unixpickle/weakai/svm"
 )
+
+type Result struct {
+	Classifier *Classifier `json:"classifier"`
+	GridCache  string      `json:"gridCache"`
+}
 
 func main() {
 	js.Global.Set("onmessage", js.MakeFunc(handleMessage))
 }
 
 func handleMessage(this *js.Object, dataArg []*js.Object) interface{} {
-	if len(dataArg) != 1 {
-		panic("expected one argument")
-	}
+	req := NewRequest(dataArg)
 
-	data := dataArg[0].Get("data")
-	sampleCount := data.Index(0).Int()
-	positiveCount := data.Index(1).Int()
-	sampleProducts := data.Index(2)
-	tradeoff := data.Index(3).Float()
-	timeout := time.Millisecond * time.Duration(data.Index(4).Int())
-
-	problem := svmProblem(sampleCount, positiveCount, func(i, j int) float64 {
-		idx := i + j*sampleCount
-		return sampleProducts.Index(idx).Float()
-	})
-
-	solver := &svm.GradientDescentSolver{Timeout: timeout, Tradeoff: tradeoff}
-	solution := solver.Solve(problem)
-
-	js.Global.Call("postMessage", solutionToJS(solution))
-	js.Global.Call("close")
-	return nil
-}
-
-func svmProblem(total, positive int, products func(i, j int) float64) *svm.Problem {
-	var samples []svm.Sample
-	for i := 0; i < total; i++ {
-		sample := svm.Sample{UserInfo: i + 1, V: []float64{}}
-		samples = append(samples, sample)
-	}
-	return &svm.Problem{
-		Positives: samples[:positive],
-		Negatives: samples[positive:],
+	problem := &svm.Problem{
+		Positives: req.Positives,
+		Negatives: req.Negatives,
 		Kernel: func(s1, s2 svm.Sample) float64 {
-			if s1.UserInfo == 0 || s2.UserInfo == 0 {
-				panic("not one of the provided samples")
-			}
-			return products(s1.UserInfo-1, s2.UserInfo-1)
+			x1, y1 := s1.V[0], s1.V[1]
+			x2, y2 := s2.V[0], s2.V[1]
+			return req.Kernel(x1, y1, x2, y2)
 		},
 	}
-}
-
-func solutionToJS(solution *svm.CombinationClassifier) interface{} {
-	supportIndices := make([]int, len(solution.SupportVectors))
-	supportCoeffs := make([]float64, len(solution.SupportVectors))
-	for i, x := range solution.SupportVectors {
-		supportIndices[i] = x.UserInfo - 1
-		supportCoeffs[i] = solution.Coefficients[i]
+	solver := &svm.GradientDescentSolver{
+		Timeout:  req.Timeout,
+		Tradeoff: req.Tradeoff,
 	}
-	res := js.Global.Get("Object").New()
-	res.Set("indices", supportIndices)
-	res.Set("coeffs", supportCoeffs)
-	res.Set("threshold", solution.Threshold)
-	return res
+	solution := solver.Solve(problem)
+
+	classifier := NewClassifier(req.Kernel, solution)
+
+	cache := make([]float64, req.GridSize*req.GridSize)
+	cacheIdx := 0
+	for y := 0; y < req.GridSize; y++ {
+		for x := 0; x < req.GridSize; x++ {
+			roughX := (float64(x)/float64(req.GridSize))*2 - 1
+			roughY := (float64(y)/float64(req.GridSize))*2 - 1
+			cache[cacheIdx] = classifier.Classify(roughX, roughY)
+			cacheIdx++
+		}
+	}
+
+	cacheStr := js.Global.Get("JSON").Call("stringify", cache).String()
+	res := &Result{
+		Classifier: classifier,
+		GridCache:  cacheStr,
+	}
+	resData, _ := json.Marshal(res)
+
+	js.Global.Call("postMessage", string(resData))
+	js.Global.Call("close")
+	return nil
 }

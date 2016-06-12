@@ -11,16 +11,15 @@
   function setupKernelPicker() {
     var picker = document.getElementById('kernel-picker');
     for (var i = 0, len = window.app.kernels.length; i < len; ++i) {
-      var name = window.app.kernelNames[i];
+      var name = window.app.kernels[i];
       var option = document.createElement('option');
-      option.value = i+'';
+      option.value = name;
       option.textContent = name;
       picker.appendChild(option);
     }
     currentKernel = window.app.kernels[0];
     picker.addEventListener('change', function() {
-      var kernelIdx = parseInt(picker.value);
-      currentKernel = window.app.kernels[kernelIdx];
+      currentKernel = picker.value;
       trainClassifier();
     });
   }

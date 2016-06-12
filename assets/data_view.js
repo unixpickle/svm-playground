@@ -132,7 +132,7 @@
 
     for (var y = 0; y < height; ++y) {
       for (var x = 0; x < width; ++x) {
-        var rating = this._classifier.classify((2*x/width)-1, (2*y/height)-1);
+        var rating = this._classifier.classify(x, y);
         this._cachedProducts.push(rating);
       }
     }
