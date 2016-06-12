@@ -86,10 +86,27 @@
           return new DataPoint(p[0], p[1], false);
         }
       }
+    }),
+    new DataSet(function() {
+      while (true) {
+        var p = randomPoint();
+        if ((p[0] < -0.1 && p[1] < -0.1) ||
+            (p[0] > 0.1 && p[1] > 0.1)) {
+          return new DataPoint(p[0], p[1], true);
+        }
+      }
+    }, function() {
+      while (true) {
+        var p = randomPoint();
+        if ((p[0] < -0.1 && p[1] > 0.1) ||
+            (p[0] > 0.1 && p[1] < -0.1)) {
+          return new DataPoint(p[0], p[1], false);
+        }
+      }
     })
   ];
 
-  window.app.dataSetNames = ['Diagonal', 'Circles'];
+  window.app.dataSetNames = ['Diagonal', 'Circles', 'Checkers'];
 
   function randomPoint() {
     return [Math.random()*2-1, Math.random()*2-1];
