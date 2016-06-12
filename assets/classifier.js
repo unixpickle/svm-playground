@@ -3,7 +3,7 @@
   var TIMEOUT = 3000;
   var GRID_SIZE = 300;
 
-  window.app.kernels = ['Linear', '(xy+1)^2', 'RBF 0.1', 'RBF 1', 'RBF 3', 'RBF 10'];
+  window.app.kernels = ['RBF 3', 'Linear', '(xy+1)^2', 'RBF 0.1', 'RBF 1', 'RBF 10'];
 
   function Classifier(samples, result) {
     this._samples = samples;

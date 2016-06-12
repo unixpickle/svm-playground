@@ -36,7 +36,7 @@
   }
 
   function setupThresholdPicker() {
-    var thresholds = [0.0001, 0.001, 0.01];
+    var thresholds = [0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05];
     var picker = document.getElementById('threshold-picker');
     for (var i = 0, len = thresholds.length; i < len; ++i) {
       var name = ''+thresholds[i];

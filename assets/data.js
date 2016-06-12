@@ -43,21 +43,6 @@
     new DataSet(function() {
       while (true) {
         var p = randomPoint();
-        if (p[0]+p[1] > 0.2) {
-          return new DataPoint(p[0], p[1], true);
-        }
-      }
-    }, function() {
-      while (true) {
-        var p = randomPoint();
-        if (p[0]+p[1] < -0.2) {
-          return new DataPoint(p[0], p[1], false);
-        }
-      }
-    }),
-    new DataSet(function() {
-      while (true) {
-        var p = randomPoint();
         if ((p[0]-0.2)*(p[0]-0.2)+p[1]*p[1] < 0.25) {
           return new DataPoint(p[0], p[1], true);
         }
@@ -66,6 +51,21 @@
       while (true) {
         var p = randomPoint();
         if ((p[0]-0.2)*(p[0]-0.2)+p[1]*p[1] > 0.45) {
+          return new DataPoint(p[0], p[1], false);
+        }
+      }
+    }),
+    new DataSet(function() {
+      while (true) {
+        var p = randomPoint();
+        if (p[0]+p[1] > 0.2) {
+          return new DataPoint(p[0], p[1], true);
+        }
+      }
+    }, function() {
+      while (true) {
+        var p = randomPoint();
+        if (p[0]+p[1] < -0.2) {
           return new DataPoint(p[0], p[1], false);
         }
       }
