@@ -6,6 +6,7 @@
 
   var currentDataSet;
   var currentKernel;
+  var currentThreshold;
 
   function setupKernelPicker() {
     var picker = document.getElementById('kernel-picker');
@@ -42,6 +43,23 @@
     });
   }
 
+  function setupThresholdPicker() {
+    var thresholds = [0.0001, 0.001, 0.01];
+    var picker = document.getElementById('threshold-picker');
+    for (var i = 0, len = thresholds.length; i < len; ++i) {
+      var name = ''+thresholds[i];
+      var option = document.createElement('option');
+      option.value = name;
+      option.textContent = name;
+      picker.appendChild(option);
+    }
+    currentThreshold = thresholds[0];
+    picker.addEventListener('change', function() {
+      currentThreshold = parseFloat(picker.value);
+      trainClassifier();
+    });
+  }
+
   function setupSupportCheckbox() {
     var box = document.getElementById('support-only-checkbox');
     box.addEventListener('change', function() {
@@ -57,15 +75,15 @@
   function trainClassifier() {
     dataView.setClassifier(null);
     var data = dataView.getSamples();
-    window.app.makeClassifier(data, [true, true], 0.0001, currentKernel, function(c) {
-      dataView.setClassifier(c);
-    });
+    window.app.makeClassifier(data, [true, true], currentThreshold, currentKernel,
+      dataView.setClassifier.bind(dataView));
   }
 
   window.addEventListener('load', function() {
     setupKernelPicker();
     setupDataPicker();
     setupSupportCheckbox();
+    setupThresholdPicker();
     setupDataView();
 
     var data = currentDataSet.generateData(SAMPLE_COUNT, SAMPLE_COUNT);
