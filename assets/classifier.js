@@ -53,7 +53,10 @@
       }
     }
 
+    var outputElement = document.getElementById('output');
+    outputElement.className = 'loading';
     window.app.solve(posVecs, negVecs, tradeoff, TIMEOUT, kernel, function(s) {
+      outputElement.className = '';
       cb(new Classifier(samples, s, coordFlags, kernel));
     });
   };
