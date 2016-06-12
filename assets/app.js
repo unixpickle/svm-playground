@@ -25,21 +25,14 @@
   }
 
   function setupDataPicker() {
-    var picker = document.getElementById('data-picker');
-    for (var i = 0, len = window.app.dataSets.length; i < len; ++i) {
-      var name = window.app.dataSetNames[i];
-      var option = document.createElement('option');
-      option.value = i+'';
-      option.textContent = name;
-      picker.appendChild(option);
-    }
-    currentDataSet = window.app.dataSets[0];
-    picker.addEventListener('change', function() {
-      var dataIdx = parseInt(picker.value);
+    var picker = new window.app.DataPicker();
+    picker.setSelected(0);
+    picker.onChange = function(dataIdx) {
       currentDataSet = window.app.dataSets[dataIdx];
       dataView.setSamples(currentDataSet.generateData(SAMPLE_COUNT, SAMPLE_COUNT));
       trainClassifier();
-    });
+    };
+    currentDataSet = window.app.dataSets[0];
   }
 
   function setupThresholdPicker() {

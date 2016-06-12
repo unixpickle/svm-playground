@@ -103,8 +103,6 @@
     })
   ];
 
-  window.app.dataSetNames = ['Diagonal', 'Circles', 'Checkers', 'Spiral'];
-
   function randomPoint() {
     return [Math.random()*2-1, Math.random()*2-1];
   }
