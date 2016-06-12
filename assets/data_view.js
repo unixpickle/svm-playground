@@ -16,6 +16,10 @@
     this._discretize = false;
   }
 
+  DataView.prototype.getSamples = function() {
+    return this._samples;
+  };
+
   DataView.prototype.setSamples = function(s) {
     this._samples = s;
     this._draw();

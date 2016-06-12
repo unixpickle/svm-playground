@@ -71,8 +71,25 @@
           return new DataPoint(p[0], p[1], false);
         }
       }
+    }),
+    new DataSet(function() {
+      while (true) {
+        var p = randomPoint();
+        if ((p[0]-0.2)*(p[0]-0.2)+p[1]*p[1] < 0.25) {
+          return new DataPoint(p[0], p[1], true);
+        }
+      }
+    }, function() {
+      while (true) {
+        var p = randomPoint();
+        if ((p[0]-0.2)*(p[0]-0.2)+p[1]*p[1] > 0.45) {
+          return new DataPoint(p[0], p[1], false);
+        }
+      }
     })
   ];
+
+  window.app.dataSetNames = ['Diagonal', 'Circles'];
 
   function randomPoint() {
     return [Math.random()*2-1, Math.random()*2-1];
