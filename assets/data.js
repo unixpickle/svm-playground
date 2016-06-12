@@ -103,10 +103,24 @@
           return new DataPoint(p[0], p[1], false);
         }
       }
+    }),
+    new DataSet(function() {
+      while (true) {
+        var angle = Math.random() * 3 * Math.PI;
+        return new DataPoint(Math.sin(angle)*angle/10,
+          Math.cos(angle)*angle/10, true);
+      }
+    }, function() {
+      while (true) {
+        var angle = Math.random() * 3 * Math.PI;
+        var offset = -Math.PI;
+        return new DataPoint(Math.sin(angle+offset)*angle/10,
+          Math.cos(-angle+offset)*angle/10, false);
+      }
     })
   ];
 
-  window.app.dataSetNames = ['Diagonal', 'Circles', 'Checkers'];
+  window.app.dataSetNames = ['Diagonal', 'Circles', 'Checkers', 'Spiral'];
 
   function randomPoint() {
     return [Math.random()*2-1, Math.random()*2-1];
