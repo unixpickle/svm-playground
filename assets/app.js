@@ -67,6 +67,13 @@
     });
   }
 
+  function setupDiscretizeCheckbox() {
+    var box = document.getElementById('discretize-checkbox');
+    box.addEventListener('change', function() {
+      dataView.setDiscretize(box.checked);
+    });
+  }
+
   function setupDataView() {
     var dataCanvas = document.getElementById('data-canvas');
     dataView = new window.app.DataView(dataCanvas);
@@ -82,8 +89,9 @@
   window.addEventListener('load', function() {
     setupKernelPicker();
     setupDataPicker();
-    setupSupportCheckbox();
     setupThresholdPicker();
+    setupSupportCheckbox();
+    setupDiscretizeCheckbox();
     setupDataView();
 
     var data = currentDataSet.generateData(SAMPLE_COUNT, SAMPLE_COUNT);

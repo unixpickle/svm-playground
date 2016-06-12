@@ -15,7 +15,9 @@
     this._classifier = null;
     this._discretize = false;
     this._supportOnly = false;
+
     this._cachedClassifierDrawing = null;
+    this._cachedProducts = null;
   }
 
   DataView.prototype.getSamples = function() {
@@ -30,6 +32,7 @@
   DataView.prototype.setClassifier = function(c) {
     this._classifier = c;
     this._cachedClassifierDrawing = null;
+    this._cachedProducts = null;
     this._draw();
   };
 
@@ -54,26 +57,24 @@
   };
 
   DataView.prototype._drawClassifier = function(ctx) {
-    if (this._cachedClassifierDrawing !== null) {
-      ctx.putImageData(this._cachedClassifierDrawing, 0, 0);
-      return;
-    }
-    var width = this._canvas.width;
-    var height = this._canvas.height;
-    var data = ctx.createImageData(width, height);
-    var dataIdx = 0;
-    for (var y = 0; y < height; ++y) {
-      for (var x = 0; x < width; ++x) {
-        var color = this._colorForPoint((2*x/width)-1, (2*y/height)-1);
-        for (var i = 0; i < 3; ++i) {
-          data.data[dataIdx+i] = color[i];
+    if (this._cachedClassifierDrawing === null) {
+      var width = this._canvas.width;
+      var height = this._canvas.height;
+      var data = ctx.createImageData(width, height);
+      var dataIdx = 0;
+      for (var y = 0; y < height; ++y) {
+        for (var x = 0; x < width; ++x) {
+          var color = this._colorForPoint(x, y);
+          for (var i = 0; i < 3; ++i) {
+            data.data[dataIdx+i] = color[i];
+          }
+          data.data[dataIdx+3] = 255;
+          dataIdx += 4;
         }
-        data.data[dataIdx+3] = 255;
-        dataIdx += 4;
       }
+      this._cachedClassifierDrawing = data;
     }
-    this._cachedClassifierDrawing = data;
-    this._drawClassifier(ctx);
+    ctx.putImageData(this._cachedClassifierDrawing, 0, 0);
   };
 
   DataView.prototype._drawSamplePoints = function(ctx) {
@@ -111,17 +112,32 @@
   };
 
   DataView.prototype._colorForPoint = function(x, y) {
-    var point = new window.app.DataPoint(x, y, false);
-    var rating = this._classifier.classify(point);
-    if (this._discretize) {
-      if (rating > 0) {
-        return POS_DECISION_COLOR;
+    var width = this._canvas.width;
+    if (this._cachedProducts !== null) {
+      var rating = this._cachedProducts[x+y*width];
+      if (this._discretize) {
+        if (rating > 0) {
+          return POS_DECISION_COLOR;
+        } else {
+          return NEG_DECISION_COLOR;
+        }
       } else {
-        return NEG_DECISION_COLOR;
+        return colorForDecision(rating);
       }
-    } else {
-      return colorForDecision(rating);
     }
+
+    var height = this._canvas.height;
+    this._cachedProducts = [];
+
+    for (var y = 0; y < height; ++y) {
+      for (var x = 0; x < width; ++x) {
+        var point = new window.app.DataPoint((2*x/width)-1, (2*y/height)-1, false);
+        var rating = this._classifier.classify(point);
+        this._cachedProducts.push(rating);
+      }
+    }
+
+    return this._colorForPoint(x, y);
   };
 
   function colorForDecision(d) {
