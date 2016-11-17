@@ -79,11 +79,9 @@
   };
 
   DataView.prototype._drawSamplePoints = function(ctx) {
-    ctx.save();
-    ctx.scale(this._canvas.width, this._canvas.height);
-
-    ctx.strokeStyle = CIRCLE_BORDER_COLOR;
-    ctx.lineWidth = CIRCLE_BORDER_WIDTH;
+    var scale = this._canvas.width;
+    ctx.strokeStyle = CIRCLE_BORDER_COLOR * scale;
+    ctx.lineWidth = CIRCLE_BORDER_WIDTH * scale;
 
     var samples = this._samplesToDraw();
     for (var i = 0, len = samples.length; i < len; ++i) {
@@ -95,13 +93,11 @@
         ctx.fillStyle = NEGATIVE_COLOR;
       }
       ctx.beginPath();
-      ctx.arc(x, y, CIRCLE_RADIUS, 0, 2*Math.PI);
+      ctx.arc(x*scale, y*scale, CIRCLE_RADIUS*scale, 0, 2*Math.PI);
       ctx.closePath();
       ctx.stroke();
       ctx.fill();
     }
-
-    ctx.restore();
   };
 
   DataView.prototype._samplesToDraw = function() {
